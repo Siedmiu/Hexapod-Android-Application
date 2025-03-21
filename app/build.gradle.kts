@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.first"
+    namespace = "com.example.hexapod"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.first"
+        applicationId = "com.example.hexapod"
         minSdk = 24
         targetSdk = 35
         versionCode = 1

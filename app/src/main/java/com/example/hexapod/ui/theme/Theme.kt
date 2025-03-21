@@ -1,6 +1,5 @@
-package com.example.first.ui.theme
+package com.example.hexapod.ui.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme

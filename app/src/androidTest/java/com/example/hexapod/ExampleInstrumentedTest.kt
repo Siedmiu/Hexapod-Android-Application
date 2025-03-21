@@ -1,4 +1,4 @@
-package com.example.first
+package com.example.hexapod
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">First</string>
+    <string name="app_name">Hexapod</string>
 
     <string name="button11">Button 1 1</string>
     <string name="button12">Button 1 2</string>

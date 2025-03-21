@@ -1,4 +1,4 @@
-package com.example.first
+package com.example.hexapod
 
 import org.junit.Test
 

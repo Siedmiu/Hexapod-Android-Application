@@ -1,4 +1,4 @@
-package com.example.first.ui.theme
+package com.example.hexapod.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
