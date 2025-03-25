@@ -11,5 +11,11 @@
     <string name="button32">Button 3 2</string>
     <string name="button33">Button 3 3</string>
 
+    <string name="main">Main</string>
+    <string name="info">Info</string>
+    <string name="position">Position</string>
+    <string name="state">State</string>
+    <string name="returnButton">Return</string>
+
 
 </resources>
