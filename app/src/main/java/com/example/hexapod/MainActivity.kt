@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -23,6 +24,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.hexapod.ui.theme.MyNavBar
+import com.example.hexapod.ui.theme.NavHostContainer
 import java.util.Timer
 import java.util.TimerTask
 
@@ -54,31 +57,19 @@ enum class HexScreen(@StringRes val title: Int){
     Info(title = R.string.info)
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MMenu1(navController: NavHostController = rememberNavController()) {
 
-    //val currentScreen = HexScreen.valueOf(backStackEntry?.destination?.route ?: HexScreen.Main.name)
-
-    Scaffold { innerPadding ->
-        NavHost(
-            navController = navController,
-            startDestination = HexScreen.Main.name,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-        ) {
-            composable(HexScreen.Main.name) {
-                MainScreen(onNavigateToSecondScreen = {
-                    navController.navigate(HexScreen.Info.name)
-                })
-            }
-            composable(HexScreen.Info.name) {
-                InfoScreen(onReturnClicked = {
-                    navController.navigate(HexScreen.Main.name)
-                })
-            }
-        }
+    Scaffold(
+        bottomBar = { MyNavBar(navController) } // Użycie NavBar jako dolnego paska
+    ) {
+        NavHostContainer(navController, Modifier.padding(it))
     }
+//TODO
+// make properly working system of getting back, to not as now switch between screens as many times as user did it
+//    val currentScreen = HexScreen.valueOf(backStackEntry?.destination?.route ?: HexScreen.Main.name)
+
 
 }
 
@@ -88,5 +79,11 @@ fun MMenu1Preview() {
     FirstTheme {
         MMenu1()
     }
+}
+
+@Preview
+@Composable
+fun navBarPreview(){
+    FirstTheme { MyNavBar(navController = rememberNavController()) }
 }
 

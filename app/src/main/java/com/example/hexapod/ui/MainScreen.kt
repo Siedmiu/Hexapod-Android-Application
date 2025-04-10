@@ -136,7 +136,7 @@ fun MainScreen(onNavigateToSecondScreen: () -> Unit){
                 Text(text = stringResource(R.string.button32), fontSize = 12.sp)
             }
             Button(
-                onClick =  onNavigateToSecondScreen,
+                onClick =  { WebSocketHandler.sendLedColor(0xFFF000) },
                 modifier = Modifier.padding(12.dp)
             ) {
                 Text(text = stringResource(R.string.button33), fontSize = 12.sp)
