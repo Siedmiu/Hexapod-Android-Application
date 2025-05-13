@@ -50,13 +50,19 @@ fun MyNavBar(navController: NavController) {
     NavigationBar {
         NavigationBarItem(
             selected = false,
-            onClick = { navController.navigate(HexScreen.Main.name) },
+            onClick = { navController.navigate(HexScreen.Main.name){
+                popUpTo(navController.graph.startDestinationId){
+                    inclusive = true
+                }
+            } },
             label = { Text("Main") },
             icon = { Icon(Icons.Default.Home, contentDescription = "Screen 1") }
         )
         NavigationBarItem(
             selected = false,
-            onClick = { navController.navigate(HexScreen.Info.name) },
+            onClick = { navController.navigate(HexScreen.Info.name){
+                popUpTo(navController.graph.startDestinationId)
+            } },
             label = { Text("Info") },
             icon = { Icon(Icons.Default.Settings, contentDescription = "Screen 2") }
         )

@@ -66,9 +66,6 @@ fun MMenu1(navController: NavHostController = rememberNavController()) {
     ) {
         NavHostContainer(navController, Modifier.padding(it))
     }
-//TODO
-// make properly working system of getting back, to not as now switch between screens as many times as user did it
-//    val currentScreen = HexScreen.valueOf(backStackEntry?.destination?.route ?: HexScreen.Main.name)
 
 
 }
