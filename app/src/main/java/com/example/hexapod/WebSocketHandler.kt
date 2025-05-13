@@ -16,8 +16,8 @@ object WebSocketHandler {
     private val client = OkHttpClient.Builder()
         .pingInterval(5, TimeUnit.SECONDS)
         .build()
-    private const val IP = "192.169.0.201"
-    private const val PORT = 8765
+    private const val IP = "192.168.229.80"
+    private const val PORT = 80
     private const val URL = "ws://$IP:$PORT/"
 
     private var webSocket: WebSocket? = null
@@ -94,8 +94,8 @@ object WebSocketHandler {
         reconnectTimer = null
     }
 
-    fun sendLedColor(ledColor: Int) {
-        val message = "{\"led_color\": $ledColor}"
+    fun sendMessage(servo: Int, angle: Int) {
+        val message = "servo $servo $angle"
         webSocket?.send(message)
     }
 

@@ -82,19 +82,19 @@ fun MainScreen(onNavigateToSecondScreen: () -> Unit){
 
         Row {
             Button(
-                onClick = { WebSocketHandler.sendLedColor(0xFF0000) },
+                onClick = { WebSocketHandler.sendMessage(12,0) },
                 modifier = Modifier.padding(12.dp)
             ) {
                 Text(text = stringResource(R.string.button11), fontSize = 12.sp)
             }
             Button(
-                onClick = { WebSocketHandler.sendLedColor(0x00FF00) },
+                onClick = { WebSocketHandler.sendMessage(12,90) },
                 modifier = Modifier.padding(12.dp)
             ) {
                 Text(text = stringResource(R.string.button12), fontSize = 12.sp)
             }
             Button(
-                onClick = { WebSocketHandler.sendLedColor(0x0000FF) },
+                onClick = { WebSocketHandler.sendMessage(12,180) },
                 modifier = Modifier.padding(12.dp)
             ) {
                 Text(text = stringResource(R.string.button13), fontSize = 12.sp)
@@ -103,19 +103,19 @@ fun MainScreen(onNavigateToSecondScreen: () -> Unit){
 
         Row {
             Button(
-                onClick = { WebSocketHandler.sendLedColor(0xFFFF00) },
+                onClick = { WebSocketHandler.sendMessage(13,0) },
                 modifier = Modifier.padding(12.dp)
             ) {
                 Text(text = stringResource(R.string.button21), fontSize = 12.sp)
             }
             Button(
-                onClick = { WebSocketHandler.sendLedColor(0xFF00FF) },
+                onClick = { WebSocketHandler.sendMessage(13,90) },
                 modifier = Modifier.padding(12.dp)
             ) {
                 Text(text = stringResource(R.string.button22), fontSize = 12.sp)
             }
             Button(
-                onClick = { WebSocketHandler.sendLedColor(0x00FFFF) },
+                onClick = { WebSocketHandler.sendMessage(13,180) },
                 modifier = Modifier.padding(12.dp)
             ) {
                 Text(text = stringResource(R.string.button23), fontSize = 12.sp)
@@ -124,19 +124,19 @@ fun MainScreen(onNavigateToSecondScreen: () -> Unit){
 
         Row {
             Button(
-                onClick = { WebSocketHandler.sendLedColor(0xFFFFFF) },
+                onClick = { WebSocketHandler.sendMessage(14,0) },
                 modifier = Modifier.padding(12.dp)
             ) {
                 Text(text = stringResource(R.string.button31), fontSize = 12.sp)
             }
             Button(
-                onClick = { WebSocketHandler.sendLedColor(0x000000) },
+                onClick = { WebSocketHandler.sendMessage(14,90) },
                 modifier = Modifier.padding(12.dp)
             ) {
                 Text(text = stringResource(R.string.button32), fontSize = 12.sp)
             }
             Button(
-                onClick =  { WebSocketHandler.sendLedColor(0xFFF000) },
+                onClick =  { WebSocketHandler.sendMessage(14,180) },
                 modifier = Modifier.padding(12.dp)
             ) {
                 Text(text = stringResource(R.string.button33), fontSize = 12.sp)
