@@ -54,7 +54,8 @@ class MainActivity : ComponentActivity() {
 
 enum class HexScreen(@StringRes val title: Int){
     Main(title = R.string.main),
-    Info(title = R.string.info)
+    Info(title = R.string.info),
+    Control(title = R.string.control)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

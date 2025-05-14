@@ -12,6 +12,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.material3.Icon
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Settings
@@ -25,6 +26,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.hexapod.HexScreen
+import com.example.hexapod.ui.ControlScreen
 import com.example.hexapod.ui.MainScreen
 import com.example.hexapod.ui.InfoScreen
 
@@ -66,6 +68,15 @@ fun MyNavBar(navController: NavController) {
             label = { Text("Info") },
             icon = { Icon(Icons.Default.Settings, contentDescription = "Screen 2") }
         )
+        NavigationBarItem(
+            selected = false,
+            onClick = {navController.navigate(HexScreen.Control.name){
+                popUpTo(navController.graph.startDestinationId)
+            } },
+            label = {Text("Control")},
+            icon = { Icon(Icons.Default.Build, contentDescription = "Screen3") }
+
+        )
     }
 }
 
@@ -86,5 +97,10 @@ fun NavHostContainer(navController: NavHostController, modifier: Modifier = Modi
                     navController.navigate(HexScreen.Main.name)
                 })
                 }
+        composable (HexScreen.Control.name){
+            ControlScreen(onReturnClicked = {
+                navController.navigate(HexScreen.Main.name)
+            })
+        }
     }
 }

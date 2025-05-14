@@ -13,6 +13,7 @@
 
     <string name="main">Main</string>
     <string name="info">Info</string>
+    <string name="control">Control</string>
     <string name="position">Position</string>
     <string name="state">State</string>
     <string name="returnButton">Return</string>
