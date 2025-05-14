@@ -14,6 +14,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.hexapod.WebSocketHandler
 import com.example.hexapod.data.GlobalData
 import com.example.hexapod.ui.theme.FirstTheme
 
@@ -32,8 +33,11 @@ import com.example.hexapod.ui.theme.FirstTheme
 
                Slider(
                    value = sliderPosition[i],
-                   onValueChange = { sliderPosition[i] = it
-                       GlobalData.sliderPosition[i] = it},
+                   onValueChange = { 
+                        sliderPosition[i] = it
+                        GlobalData.sliderPosition[i] = it
+                        WebSocketHandler.sendMessage(i,sliderPosition[i].toInt())
+                        },
                    valueRange = 0f..180f
                )
 
