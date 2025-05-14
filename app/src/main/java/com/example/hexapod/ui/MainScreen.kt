@@ -4,9 +4,11 @@ import android.os.Handler
 import android.os.Looper
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
@@ -81,21 +83,23 @@ fun MainScreen(onNavigateToSecondScreen: () -> Unit){
         Spacer(modifier = Modifier.height(64.dp))
 
         Row {
+
             Button(
                 onClick = { WebSocketHandler.sendMessage(12,0) },
-                modifier = Modifier.padding(12.dp)
+                modifier = Modifier.padding(12.dp).weight(1f)
             ) {
                 Text(text = stringResource(R.string.button11), fontSize = 12.sp)
             }
             Button(
                 onClick = { WebSocketHandler.sendMessage(12,90) },
-                modifier = Modifier.padding(12.dp)
+                modifier = Modifier.padding(12.dp).weight(1f)
             ) {
                 Text(text = stringResource(R.string.button12), fontSize = 12.sp)
             }
             Button(
                 onClick = { WebSocketHandler.sendMessage(12,180) },
-                modifier = Modifier.padding(12.dp)
+                modifier = Modifier.padding(12.dp).weight(1f),
+
             ) {
                 Text(text = stringResource(R.string.button13), fontSize = 12.sp)
             }
@@ -104,19 +108,19 @@ fun MainScreen(onNavigateToSecondScreen: () -> Unit){
         Row {
             Button(
                 onClick = { WebSocketHandler.sendMessage(13,0) },
-                modifier = Modifier.padding(12.dp)
+                modifier = Modifier.padding(12.dp).weight(1f)
             ) {
                 Text(text = stringResource(R.string.button21), fontSize = 12.sp)
             }
             Button(
                 onClick = { WebSocketHandler.sendMessage(13,90) },
-                modifier = Modifier.padding(12.dp)
+                modifier = Modifier.padding(12.dp).weight(1f)
             ) {
                 Text(text = stringResource(R.string.button22), fontSize = 12.sp)
             }
             Button(
                 onClick = { WebSocketHandler.sendMessage(13,180) },
-                modifier = Modifier.padding(12.dp)
+                modifier = Modifier.padding(12.dp).weight(1f)
             ) {
                 Text(text = stringResource(R.string.button23), fontSize = 12.sp)
             }
@@ -125,19 +129,19 @@ fun MainScreen(onNavigateToSecondScreen: () -> Unit){
         Row {
             Button(
                 onClick = { WebSocketHandler.sendMessage(14,0) },
-                modifier = Modifier.padding(12.dp)
+                modifier = Modifier.padding(12.dp).weight(1f)
             ) {
                 Text(text = stringResource(R.string.button31), fontSize = 12.sp)
             }
             Button(
                 onClick = { WebSocketHandler.sendMessage(14,90) },
-                modifier = Modifier.padding(12.dp)
+                modifier = Modifier.padding(12.dp).weight(1f)
             ) {
                 Text(text = stringResource(R.string.button32), fontSize = 12.sp)
             }
             Button(
                 onClick =  { WebSocketHandler.sendMessage(14,180) },
-                modifier = Modifier.padding(12.dp)
+                modifier = Modifier.padding(12.dp).weight(1f)
             ) {
                 Text(text = stringResource(R.string.button33), fontSize = 12.sp)
             }
