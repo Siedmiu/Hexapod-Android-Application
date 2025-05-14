@@ -97,7 +97,7 @@ object WebSocketHandler {
     
     @SuppressLint("DefaultLocale")
     fun sendMessage(servo: Int, angle: Int) {
-        val message = String.format("servo %d %d", servo, angle)
+        val message = String.format("servo %d %d ", servo, angle)
         webSocket?.send(message)
     }
 
