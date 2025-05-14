@@ -16,9 +16,9 @@ object WebSocketHandler {
     private val client = OkHttpClient.Builder()
         .pingInterval(5, TimeUnit.SECONDS)
         .build()
-    private const val IP = "192.168.229.80"
-    private const val PORT = 80
-    private const val URL = "ws://$IP:$PORT/"
+    private var IP = "192.168.229.80"
+    private var PORT = 80
+    private val URL get() = "ws://$IP:$PORT/"
 
     private var webSocket: WebSocket? = null
     private var connectionActive = mutableStateOf(false)
@@ -27,6 +27,29 @@ object WebSocketHandler {
     private var autoReconnect = true
     private var reconnectTimer: Timer? = null
     private const val RECONNECT_INTERVAL = 5000L
+
+    // Getters for IP and PORT
+    fun getIP(): String = IP
+    fun getPort(): Int = PORT
+
+    // Setters for IP and PORT with reconnection
+    fun updateIP(newIP: String) {
+        val wasConnected = connectionActive.value
+        IP = newIP
+        if (wasConnected) {
+            disconnect()
+            connect()
+        }
+    }
+
+    fun updatePort(newPort: Int) {
+        val wasConnected = connectionActive.value
+        PORT = newPort
+        if (wasConnected) {
+            disconnect()
+            connect()
+        }
+    }
 
     fun connect() {
         val request = Request.Builder().url(URL).build()
@@ -99,7 +122,7 @@ object WebSocketHandler {
         webSocket?.send(message)
     }
 
-    fun sendMessage(messageIn:String) {
+    fun sendMessage(messageIn: String) {
         val message = "$messageIn "
         webSocket?.send(message)
     }
