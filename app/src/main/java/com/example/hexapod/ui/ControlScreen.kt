@@ -36,7 +36,7 @@ import com.example.hexapod.ui.theme.FirstTheme
                    onValueChange = { 
                         sliderPosition[i] = it
                         GlobalData.sliderPosition[i] = it
-                        WebSocketHandler.sendMessage(i,sliderPosition[i].toInt())
+                        WebSocketHandler.sendServo(i,sliderPosition[i].toInt())
                         },
                    valueRange = 0f..180f
                )

@@ -1,6 +1,5 @@
 package com.example.hexapod
 
-import android.annotation.SuppressLint
 import android.os.Handler
 import android.os.Looper
 import androidx.compose.runtime.mutableStateOf
@@ -94,10 +93,14 @@ object WebSocketHandler {
         reconnectTimer?.purge()
         reconnectTimer = null
     }
-    
-    @SuppressLint("DefaultLocale")
-    fun sendMessage(servo: Int, angle: Int) {
-        val message = String.format("servo %d %d ", servo, angle)
+
+    fun sendServo(servo: Int, angle: Int) {
+        val message = "servo $servo $angle "
+        webSocket?.send(message)
+    }
+
+    fun sendMessage(messageIn:String) {
+        val message = "$messageIn "
         webSocket?.send(message)
     }
 
