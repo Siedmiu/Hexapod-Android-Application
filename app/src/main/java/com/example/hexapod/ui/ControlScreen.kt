@@ -22,7 +22,7 @@ import com.example.hexapod.ui.theme.FirstTheme
 @Composable fun ControlScreen(onReturnClicked: () -> Unit){
     var sliderPosition = remember { mutableStateListOf<Float>().apply { repeat(18) { add(GlobalData.sliderPosition[it])} } }
 
-   LazyColumn(Modifier.padding(10.dp)) {
+   LazyColumn(Modifier.padding(start = 30.dp, end = 30.dp)) {
 
        for (i in 0 until sliderPosition.size){
            item {
