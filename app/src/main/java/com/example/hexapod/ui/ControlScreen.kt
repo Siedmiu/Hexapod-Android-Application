@@ -84,7 +84,7 @@ import com.example.hexapod.ui.theme.FirstTheme
            Slider(
                value = sliderPosition5,
                onValueChange = { sliderPosition5 = it
-                   GlobalData.sliderPosition5 - sliderPosition5},
+                   GlobalData.sliderPosition5 = sliderPosition5},
                valueRange = 0f..180f
            )
            Text(text = sliderPosition5.toInt().toString())
@@ -93,7 +93,7 @@ import com.example.hexapod.ui.theme.FirstTheme
            Slider(
                value = sliderPosition6,
                onValueChange = { sliderPosition6 = it
-                   GlobalData.sliderPosition6 - sliderPosition6},
+                   GlobalData.sliderPosition6 = sliderPosition6},
                valueRange = 0f..180f
            )
            Text(text = sliderPosition6.toInt().toString())
@@ -209,7 +209,7 @@ import com.example.hexapod.ui.theme.FirstTheme
            Slider(
                value = sliderPosition18,
                onValueChange = { sliderPosition18 = it
-                   GlobalData.sliderPosition15 = sliderPosition18},
+                   GlobalData.sliderPosition18 = sliderPosition18},
                valueRange = 0f..180f
            )
            Text(text = sliderPosition18.toInt().toString())
