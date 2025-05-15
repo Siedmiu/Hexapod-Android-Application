@@ -33,10 +33,7 @@ import java.util.Timer
 import java.util.TimerTask
 
 @Composable
-fun MainScreen(
-    onNavigateToSecondScreen: () -> Unit,
-    onNavigateToInfoScreen: () -> Unit = {}
-) {
+fun MainScreen(){
     var isConnected by remember { mutableStateOf(WebSocketHandler.isConnected()) }
 
     val timer = remember { Timer() }
@@ -151,5 +148,5 @@ fun MainScreen(
 @Preview
 @Composable
 fun MainScreenPreview() {
-    FirstTheme { MainScreen({}, {}) }
+    FirstTheme { MainScreen() }
 }

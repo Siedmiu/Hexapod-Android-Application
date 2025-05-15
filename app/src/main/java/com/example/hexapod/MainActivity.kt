@@ -6,7 +6,6 @@ import androidx.activity.compose.setContent
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -48,7 +47,6 @@ enum class HexScreen(@StringRes val title: Int){
     Control(title = R.string.control)
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MMenu1(navController: NavHostController = rememberNavController()) {
 
@@ -71,7 +69,7 @@ fun MMenu1Preview() {
 
 @Preview
 @Composable
-fun navBarPreview(){
+fun NavBarPreview(){
     FirstTheme { MyNavBar(navController = rememberNavController()) }
 }
 
