@@ -9,8 +9,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -28,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.hexapod.R
 import com.example.hexapod.WebSocketHandler
+import com.example.hexapod.data.GlobalData
 import com.example.hexapod.ui.theme.FirstTheme
 import java.util.Timer
 import java.util.TimerTask
@@ -37,6 +40,9 @@ fun MainScreen(){
     var isConnected by remember { mutableStateOf(WebSocketHandler.isConnected()) }
 
     val timer = remember { Timer() }
+
+    val radioOptions = listOf("Bigate", "Ripplegate", "Trigate")
+    val (selectedOption, onOptionSelected) = remember { mutableStateOf(radioOptions[0]) }
 
     DisposableEffect(Unit) {
         timer.schedule(object : TimerTask() {
@@ -82,7 +88,17 @@ fun MainScreen(){
 
         Row {
             Button(
-                onClick = { WebSocketHandler.sendMessage(" ") },
+                onClick = {
+                    if (selectedOption == "Bigate"){
+                        //TODO send appropriate signals for every gate
+                    }
+                    else if (selectedOption == "Ripplegate"){
+
+                    }
+                    else if (selectedOption == "Trigate"){
+                        GlobalData.sliderPosition[0] = 10f // example that ensures that it works
+                    }
+                    WebSocketHandler.sendMessage(" ") },
                 modifier = Modifier.padding(12.dp).weight(1f)
             ) {
                 Text(text = stringResource(R.string.button11), fontSize = 12.sp)
@@ -141,6 +157,28 @@ fun MainScreen(){
             ) {
                 Text(text = stringResource(R.string.button33), fontSize = 12.sp)
             }
+        }
+
+        Row(Modifier.selectableGroup()){
+            Column(
+                modifier = Modifier.padding(12.dp).weight(1f),
+                horizontalAlignment = Alignment.CenterHorizontally) {
+                RadioButton(selected = ("Bigate" == selectedOption) ,onClick = {onOptionSelected("Bigate")})
+                Text(text = "Bigate")
+            }
+            Column(
+                modifier = Modifier.padding(12.dp).weight(1f),
+                horizontalAlignment = Alignment.CenterHorizontally) {
+                RadioButton(selected = ("Ripplegate" == selectedOption) ,onClick = {onOptionSelected("Ripplegate")})
+                Text(text = "Ripplegate")
+            }
+            Column(
+                modifier = Modifier.padding(12.dp).weight(1f),
+                horizontalAlignment = Alignment.CenterHorizontally) {
+                RadioButton(selected = ("Trigate" == selectedOption) ,onClick = {onOptionSelected("Trigate")})
+                Text(text = "Trigate")
+            }
+
         }
     }
 }
