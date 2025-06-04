@@ -90,15 +90,15 @@ fun MainScreen(){
             Button(
                 onClick = {
                     if (selectedOption == "Bigate"){
-                        //TODO send appropriate signals for every gate
+                        WebSocketHandler.sendMessage("bigate11")
                     }
                     else if (selectedOption == "Ripplegate"){
-
+                        WebSocketHandler.sendMessage("ripplegate11")
                     }
                     else if (selectedOption == "Trigate"){
-                        GlobalData.sliderPosition[0] = 10f // example that ensures that it works
+                        WebSocketHandler.sendMessage("trigate11")
                     }
-                    WebSocketHandler.sendMessage(" ") },
+                          },
                 modifier = Modifier.padding(12.dp).weight(1f)
             ) {
                 Text(text = stringResource(R.string.button11), fontSize = 12.sp)

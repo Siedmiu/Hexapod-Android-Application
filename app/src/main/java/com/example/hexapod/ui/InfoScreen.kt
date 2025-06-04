@@ -47,6 +47,7 @@ fun InfoScreen(onNavigateBack: () -> Unit = {}, onReturnClicked: () -> Unit = on
                 },
                 label = { Text("IP Address") },
                 isError = !isIpValid,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 16.dp),
