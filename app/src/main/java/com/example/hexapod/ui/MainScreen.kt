@@ -42,15 +42,15 @@ import java.util.Timer
 import java.util.TimerTask
 
 @Composable
-fun MainScreen(){
+fun MainScreen() {
     var isConnected by remember { mutableStateOf(WebSocketHandler.isConnected()) }
 
     val timer = remember { Timer() }
 
-    val radioOptions = listOf("Bigate", "Ripplegate", "Trigate")
+    val radioOptions = listOf("Bigate", "Ripplegate", "Trigate", "Wavegate")
     val (selectedOption, onOptionSelected) = remember { mutableStateOf(radioOptions[0]) }
 
-    var posX1 by remember{mutableStateOf(GlobalData.positionX.toString())}
+    var posX1 by remember { mutableStateOf(GlobalData.positionX.toString()) }
     var posY1 by remember { mutableStateOf(GlobalData.positionY.toString()) }
 
     DisposableEffect(Unit) {
@@ -82,7 +82,7 @@ fun MainScreen(){
         }
 
         val textCon = if (isConnected) "Connected" else "Disconnected"
-        item{
+        item {
             Text(
                 text = textCon,
                 fontSize = 60.sp,
@@ -108,21 +108,29 @@ fun MainScreen(){
                             WebSocketHandler.sendMessage("ripplegate11")
                         } else if (selectedOption == "Trigate") {
                             WebSocketHandler.sendMessage("trigate11")
+                        } else if (selectedOption == "Wavegate") {
+                            WebSocketHandler.sendMessage("wavegate11")
                         }
                     },
-                    modifier = Modifier.padding(12.dp).weight(1f)
+                    modifier = Modifier
+                        .padding(12.dp)
+                        .weight(1f)
                 ) {
                     Text(text = stringResource(R.string.button11), fontSize = 12.sp)
                 }
                 Button(
                     onClick = { WebSocketHandler.sendMessage(" ") },
-                    modifier = Modifier.padding(12.dp).weight(1f)
+                    modifier = Modifier
+                        .padding(12.dp)
+                        .weight(1f)
                 ) {
                     Text(text = stringResource(R.string.button12), fontSize = 12.sp)
                 }
                 Button(
                     onClick = { WebSocketHandler.sendMessage(" ") },
-                    modifier = Modifier.padding(12.dp).weight(1f)
+                    modifier = Modifier
+                        .padding(12.dp)
+                        .weight(1f)
                 ) {
                     Text(text = stringResource(R.string.button13), fontSize = 12.sp)
                 }
@@ -132,19 +140,25 @@ fun MainScreen(){
             Row {
                 Button(
                     onClick = { WebSocketHandler.sendMessage(" ") },
-                    modifier = Modifier.padding(12.dp).weight(1f)
+                    modifier = Modifier
+                        .padding(12.dp)
+                        .weight(1f)
                 ) {
                     Text(text = stringResource(R.string.button21), fontSize = 12.sp)
                 }
                 Button(
                     onClick = { WebSocketHandler.sendMessage(" ") },
-                    modifier = Modifier.padding(12.dp).weight(1f)
+                    modifier = Modifier
+                        .padding(12.dp)
+                        .weight(1f)
                 ) {
                     Text(text = stringResource(R.string.button22), fontSize = 12.sp)
                 }
                 Button(
                     onClick = { WebSocketHandler.sendMessage(" ") },
-                    modifier = Modifier.padding(12.dp).weight(1f)
+                    modifier = Modifier
+                        .padding(12.dp)
+                        .weight(1f)
                 ) {
                     Text(text = stringResource(R.string.button23), fontSize = 12.sp)
                 }
@@ -154,19 +168,25 @@ fun MainScreen(){
             Row {
                 Button(
                     onClick = { WebSocketHandler.sendMessage(" ") },
-                    modifier = Modifier.padding(12.dp).weight(1f)
+                    modifier = Modifier
+                        .padding(12.dp)
+                        .weight(1f)
                 ) {
                     Text(text = stringResource(R.string.button31), fontSize = 12.sp)
                 }
                 Button(
                     onClick = { WebSocketHandler.sendMessage(" ") },
-                    modifier = Modifier.padding(12.dp).weight(1f)
+                    modifier = Modifier
+                        .padding(12.dp)
+                        .weight(1f)
                 ) {
                     Text(text = stringResource(R.string.button32), fontSize = 12.sp)
                 }
                 Button(
                     onClick = { WebSocketHandler.sendMessage(" ") },
-                    modifier = Modifier.padding(12.dp).weight(1f)
+                    modifier = Modifier
+                        .padding(12.dp)
+                        .weight(1f)
                 ) {
                     Text(text = stringResource(R.string.button33), fontSize = 12.sp)
                 }
@@ -175,7 +195,9 @@ fun MainScreen(){
         item {
             Row(Modifier.selectableGroup()) {
                 Column(
-                    modifier = Modifier.padding(12.dp).weight(1f),
+                    modifier = Modifier
+                        .padding(10.dp)
+                        .weight(1f),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     RadioButton(
@@ -184,7 +206,9 @@ fun MainScreen(){
                     Text(text = "Bigate")
                 }
                 Column(
-                    modifier = Modifier.padding(12.dp).weight(1f),
+                    modifier = Modifier
+                        .padding(10.dp)
+                        .weight(1f),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     RadioButton(
@@ -193,7 +217,9 @@ fun MainScreen(){
                     Text(text = "Ripplegate")
                 }
                 Column(
-                    modifier = Modifier.padding(12.dp).weight(1f),
+                    modifier = Modifier
+                        .padding(10.dp)
+                        .weight(1f),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     RadioButton(
@@ -201,39 +227,52 @@ fun MainScreen(){
                         onClick = { onOptionSelected("Trigate") })
                     Text(text = "Trigate")
                 }
+                Column(
+                    modifier = Modifier
+                        .padding(10.dp)
+                        .weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    RadioButton(
+                        selected = ("Wavegate" == selectedOption),
+                        onClick = { onOptionSelected("Wavegate") })
+                    Text(text = "Wavegate")
+                }
 
             }
         }
 
-        item{
-            Row(){
+        item {
+            Row() {
                 OutlinedTextField(
                     value = posX1,
                     onValueChange = {
                         posX1 = it
                         val check1 = it.toFloatOrNull()
-                        if (check1 != null){
+                        if (check1 != null) {
                             GlobalData.positionX = it.toFloat()
                         }
                     },
                     label = { Text("Position X") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     modifier = Modifier
-                        .padding(16.dp).weight(1f),
+                        .padding(16.dp)
+                        .weight(1f),
                 )
                 OutlinedTextField(
                     value = posY1,
                     onValueChange = {
                         posY1 = it
                         val check2 = it.toFloatOrNull()
-                        if(check2 != null){
+                        if (check2 != null) {
                             GlobalData.positionY = it.toFloat()
                         }
                     },
-                    label = {Text("Position Y")},
+                    label = { Text("Position Y") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     modifier = Modifier
-                            .padding(16.dp).weight(1f),
+                        .padding(16.dp)
+                        .weight(1f),
                 )
             }
         }
