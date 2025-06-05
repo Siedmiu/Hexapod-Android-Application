@@ -60,4 +60,6 @@ dependencies {
 
     implementation("androidx.navigation:navigation-compose:2.8.9")
 
+    implementation("com.github.Mindinventory:AndroidCircularSlider:0.0.2")
+
 }

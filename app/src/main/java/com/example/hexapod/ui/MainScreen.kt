@@ -24,6 +24,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,6 +39,7 @@ import com.example.hexapod.R
 import com.example.hexapod.WebSocketHandler
 import com.example.hexapod.data.GlobalData
 import com.example.hexapod.ui.theme.FirstTheme
+import com.github.Mindinventory.circularslider.CircularProgressBar
 import java.util.Timer
 import java.util.TimerTask
 
@@ -52,6 +54,10 @@ fun MainScreen() {
 
     var posX1 by remember { mutableStateOf(GlobalData.positionX.toString()) }
     var posY1 by remember { mutableStateOf(GlobalData.positionY.toString()) }
+
+    var angle by rememberSaveable { mutableStateOf(GlobalData.angle1) }
+
+    val maxAngle = 180f
 
     DisposableEffect(Unit) {
         timer.schedule(object : TimerTask() {
@@ -275,6 +281,19 @@ fun MainScreen() {
                         .weight(1f),
                 )
             }
+        }
+
+        item {
+            CircularProgressBar(
+                maxNum = maxAngle.toInt(),
+                currentProgressToBeReturned = {
+                    angle = it*maxAngle/100
+                    GlobalData.angle1 = angle
+                },
+                currentUpdatedValue = angle.toInt().toString()
+            )
+
+            // Cicrular Porgress Bar from https://github.com/Mindinventory/AndroidCircularSlider
         }
     }
 }

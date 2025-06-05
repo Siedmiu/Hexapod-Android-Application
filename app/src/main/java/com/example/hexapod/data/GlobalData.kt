@@ -6,4 +6,6 @@ object GlobalData {
 
     var positionX = 0f
     var positionY = 0f
+
+    var angle1 = 0f
 }
