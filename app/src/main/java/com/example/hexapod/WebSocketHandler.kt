@@ -16,8 +16,8 @@ object WebSocketHandler {
     private val client = OkHttpClient.Builder()
         .pingInterval(5, TimeUnit.SECONDS)
         .build()
-    private var IP = "192.168.229.80"
-    private var PORT = 80
+    private var IP = "192.168.195.194"
+    private var PORT = 8765
     private val URL get() = "ws://$IP:$PORT/"
 
     private var webSocket: WebSocket? = null
@@ -122,8 +122,8 @@ object WebSocketHandler {
         webSocket?.send(message)
     }
 
-    fun sendMessage(messageIn: String) {
-        val message = "$messageIn "
+    fun sendMessage(messageIn: String, optArgument: String = "") {
+        val message = "$messageIn $optArgument "
         webSocket?.send(message)
     }
 

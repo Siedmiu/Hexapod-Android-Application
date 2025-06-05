@@ -107,6 +107,14 @@ fun MainScreen() {
         item {
             Row {
                 Button(
+                    onClick = { WebSocketHandler.sendMessage(" ")},
+                    modifier = Modifier
+                        .padding(12.dp)
+                        .weight(1f)
+                ) {
+                    Text(text = stringResource(R.string.button11), fontSize = 12.sp)
+                }
+                Button(
                     onClick = {
                         if (selectedOption == "Bigate") {
                             WebSocketHandler.sendMessage("bigate11")
@@ -116,16 +124,7 @@ fun MainScreen() {
                             WebSocketHandler.sendMessage("trigate11")
                         } else if (selectedOption == "Wavegate") {
                             WebSocketHandler.sendMessage("wavegate11")
-                        }
-                    },
-                    modifier = Modifier
-                        .padding(12.dp)
-                        .weight(1f)
-                ) {
-                    Text(text = stringResource(R.string.button11), fontSize = 12.sp)
-                }
-                Button(
-                    onClick = { WebSocketHandler.sendMessage(" ") },
+                        } },
                     modifier = Modifier
                         .padding(12.dp)
                         .weight(1f)
@@ -145,7 +144,7 @@ fun MainScreen() {
         item {
             Row {
                 Button(
-                    onClick = { WebSocketHandler.sendMessage(" ") },
+                    onClick = { WebSocketHandler.sendMessage("left",angle.toString())},
                     modifier = Modifier
                         .padding(12.dp)
                         .weight(1f)
@@ -161,7 +160,7 @@ fun MainScreen() {
                     Text(text = stringResource(R.string.button22), fontSize = 12.sp)
                 }
                 Button(
-                    onClick = { WebSocketHandler.sendMessage(" ") },
+                    onClick = { WebSocketHandler.sendMessage("right",angle.toString()) },
                     modifier = Modifier
                         .padding(12.dp)
                         .weight(1f)
