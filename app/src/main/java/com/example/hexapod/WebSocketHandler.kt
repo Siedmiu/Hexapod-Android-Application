@@ -122,8 +122,8 @@ object WebSocketHandler {
         webSocket?.send(message)
     }
 
-    fun sendMessage(messageIn: String, optArgument: String = "") {
-        val message = "$messageIn $optArgument "
+    fun sendMessage(messageIn: String, optArgument1: String = "", optArgument2: String = "") {
+        val message = "$messageIn $optArgument1 $optArgument2 "
         webSocket?.send(message)
     }
 

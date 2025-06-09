@@ -7,9 +7,9 @@
     <string name="button21">Left</string>
     <string name="button22">Stop</string>
     <string name="button23">Right</string>
-    <string name="button31">Button 3 1</string>
+    <string name="button31">Add point</string>
     <string name="button32">Backward</string>
-    <string name="button33">Button 3 3</string>
+    <string name="button33">Go to point</string>
 
     <string name="main">Main</string>
     <string name="info">Settings</string>

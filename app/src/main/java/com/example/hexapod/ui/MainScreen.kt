@@ -7,13 +7,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -57,7 +55,7 @@ fun MainScreen() {
 
     var angle by rememberSaveable { mutableStateOf(GlobalData.angle1) }
 
-    val maxAngle = 180f
+    val maxAngle = 180
 
     DisposableEffect(Unit) {
         timer.schedule(object : TimerTask() {
@@ -117,13 +115,13 @@ fun MainScreen() {
                 Button(
                     onClick = {
                         if (selectedOption == "Bigate") {
-                            WebSocketHandler.sendMessage("bigate11")
+                            WebSocketHandler.sendMessage("bigateForw")
                         } else if (selectedOption == "Ripplegate") {
-                            WebSocketHandler.sendMessage("ripplegate11")
+                            WebSocketHandler.sendMessage("ripplegateForw")
                         } else if (selectedOption == "Trigate") {
-                            WebSocketHandler.sendMessage("trigate11")
+                            WebSocketHandler.sendMessage("trigateForw")
                         } else if (selectedOption == "Wavegate") {
-                            WebSocketHandler.sendMessage("wavegate11")
+                            WebSocketHandler.sendMessage("wavegateForw")
                         } },
                     modifier = Modifier
                         .padding(12.dp)
@@ -172,7 +170,7 @@ fun MainScreen() {
         item {
             Row {
                 Button(
-                    onClick = { WebSocketHandler.sendMessage(" ") },
+                    onClick = { WebSocketHandler.sendMessage("point add",posX1,posY1) },
                     modifier = Modifier
                         .padding(12.dp)
                         .weight(1f)
@@ -180,7 +178,16 @@ fun MainScreen() {
                     Text(text = stringResource(R.string.button31), fontSize = 12.sp)
                 }
                 Button(
-                    onClick = { WebSocketHandler.sendMessage(" ") },
+                    onClick = {
+                        if (selectedOption == "Bigate") {
+                            WebSocketHandler.sendMessage("bigateBack")
+                        } else if (selectedOption == "Ripplegate") {
+                            WebSocketHandler.sendMessage("ripplegateBack")
+                        } else if (selectedOption == "Trigate") {
+                            WebSocketHandler.sendMessage("trigateBack")
+                        } else if (selectedOption == "Wavegate") {
+                            WebSocketHandler.sendMessage("wavegateBack")
+                        } },
                     modifier = Modifier
                         .padding(12.dp)
                         .weight(1f)
@@ -188,7 +195,7 @@ fun MainScreen() {
                     Text(text = stringResource(R.string.button32), fontSize = 12.sp)
                 }
                 Button(
-                    onClick = { WebSocketHandler.sendMessage(" ") },
+                    onClick = { WebSocketHandler.sendMessage("point execute") },
                     modifier = Modifier
                         .padding(12.dp)
                         .weight(1f)
@@ -284,12 +291,12 @@ fun MainScreen() {
 
         item {
             CircularProgressBar(
-                maxNum = maxAngle.toInt(),
+                maxNum = maxAngle,
                 currentProgressToBeReturned = {
-                    angle = it*maxAngle/100
+                    angle = (it * maxAngle / 100).toInt()
                     GlobalData.angle1 = angle
                 },
-                currentUpdatedValue = angle.toInt().toString()
+                currentUpdatedValue = angle.toString()
             )
 
             // Cicrular Porgress Bar from https://github.com/Mindinventory/AndroidCircularSlider
