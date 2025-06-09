@@ -150,7 +150,7 @@ fun MainScreen() {
                     Text(text = stringResource(R.string.button21), fontSize = 12.sp)
                 }
                 Button(
-                    onClick = { WebSocketHandler.sendMessage(" ") },
+                    onClick = { WebSocketHandler.sendMessage("stop") },
                     modifier = Modifier
                         .padding(12.dp)
                         .weight(1f)
@@ -299,7 +299,7 @@ fun MainScreen() {
                 currentUpdatedValue = angle.toString()
             )
 
-            // Cicrular Porgress Bar from https://github.com/Mindinventory/AndroidCircularSlider
+            // Cicrular Progress Bar from https://github.com/Mindinventory/AndroidCircularSlider
         }
     }
 }
