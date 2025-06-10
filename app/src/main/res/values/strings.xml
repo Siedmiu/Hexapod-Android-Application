@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">Hexapod</string>
 
-    <string name="button11">Button 1 1</string>
+    <string name="button11">Hi!</string>
     <string name="button12">Forward</string>
-    <string name="button13">Button 1 3</string>
+    <string name="button13">Camera (TODO)</string>
     <string name="button21">Left</string>
     <string name="button22">Stop</string>
     <string name="button23">Right</string>

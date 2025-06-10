@@ -105,7 +105,7 @@ fun MainScreen() {
         item {
             Row {
                 Button(
-                    onClick = { WebSocketHandler.sendMessage(" ")},
+                    onClick = { WebSocketHandler.sendMessage("hi")},
                     modifier = Modifier
                         .padding(12.dp)
                         .weight(1f)
