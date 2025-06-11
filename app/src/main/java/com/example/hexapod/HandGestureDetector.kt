@@ -1,12 +1,11 @@
-import com.google.mediapipe.framework.image.BitmapImageBuilder
-import com.google.mediapipe.framework.image.MPImage
-import com.google.mediapipe.tasks.vision.gesturerecognizer.GestureRecognizer
-import com.google.mediapipe.tasks.vision.gesturerecognizer.GestureRecognizerResult
-import com.google.mediapipe.tasks.vision.core.RunningMode
 import android.content.Context
 import android.graphics.Bitmap
+import com.google.mediapipe.framework.image.BitmapImageBuilder
+import com.google.mediapipe.framework.image.MPImage
 import com.google.mediapipe.tasks.core.BaseOptions
-import kotlin.math.sqrt
+import com.google.mediapipe.tasks.vision.core.RunningMode
+import com.google.mediapipe.tasks.vision.gesturerecognizer.GestureRecognizer
+import com.google.mediapipe.tasks.vision.gesturerecognizer.GestureRecognizerResult
 
 class HandGestureDetector(private val context: Context) {
     private var gestureRecognizer: GestureRecognizer? = null
@@ -59,24 +58,24 @@ class HandGestureDetector(private val context: Context) {
                     confidence = gesture[0].score()
                     detectedGesture = recognizedGesture
 
-                    // Pozycja dłoni i landmarki
+                    // Hands positions
                     if (result.landmarks().isNotEmpty()) {
                         val handLandmarks = result.landmarks()[0]
                         if (handLandmarks.isNotEmpty()) {
                             val wrist = handLandmarks[0] // WRIST landmark
-                            
-                            // Transformacja koordynatów z powrotem do orientacji pionowej
-                            // MediaPipe zwraca koordynaty dla obrazu obróconego o 270°
-                            // Musimy je przekształcić z powrotem do orientacji pionowej
-                            val transformedX = wrist.y() // y staje się x
-                            val transformedY = 1.0f - wrist.x() // x staje się y (odwrócone)
-                            
+
+                            // coordiantes transformation
+                            // as MediaPipe coordinates are rotated we need to
+                            // re-rotate them back
+                            val transformedX = wrist.y()
+                            val transformedY = 1.0f - wrist.x()
+
                             currentPosition = Pair(transformedX, transformedY)
 
-                            // Zbierz wszystkie landmarki dla wizualizacji z transformacją
+                            // get all landmarks
                             landmarks = handLandmarks.map { landmark ->
-                                val x = landmark.y() // y staje się x
-                                val y = 1.0f - landmark.x() // x staje się y (odwrócone)
+                                val x = landmark.y()
+                                val y = 1.0f - landmark.x()
                                 Pair(x, y)
                             }
                             lastLandmarks = landmarks
@@ -89,7 +88,7 @@ class HandGestureDetector(private val context: Context) {
                 }
             }
 
-            // Przekaż landmarki do listenera
+            // landmarks to listener
             landmarks?.let {
                 try {
                     gestureListener?.onLandmarksDetected(it)
@@ -106,30 +105,32 @@ class HandGestureDetector(private val context: Context) {
         }
     }
 
-    private fun handleGestureChange(detectedGesture: String?, position: Pair<Float, Float>, confidence: Float) {
+    private fun handleGestureChange(
+        detectedGesture: String?,
+        position: Pair<Float, Float>,
+        confidence: Float
+    ) {
         try {
             val currentTime = System.currentTimeMillis()
 
             when {
-                // Nowy gest wykryty
+                // gesture detected
                 detectedGesture != null && detectedGesture != lastGesture -> {
                     lastGesture = detectedGesture
                     gestureStartTime = currentTime
 
-                    // Natychmiastowe powiadomienie o nowym geście
                     gestureListener?.onGestureDetected(detectedGesture, position, confidence)
                 }
 
-                // Ten sam gest kontynuowany
+                // still the same
                 detectedGesture != null && detectedGesture == lastGesture -> {
-                    // Gest potwierdzony po określonym czasie
                     if (currentTime - gestureStartTime > gestureConfirmationThreshold) {
                         gestureListener?.onGestureDetected(detectedGesture, position, confidence)
-                        gestureStartTime = currentTime // Reset czasu dla kolejnych powiadomień
+                        gestureStartTime = currentTime
                     }
                 }
 
-                // Brak gestu - gest utracony
+                // No gesture - gesture lost
                 detectedGesture == null && lastGesture != null -> {
                     lastGesture = null
                     gestureListener?.onGestureLost()
@@ -141,6 +142,7 @@ class HandGestureDetector(private val context: Context) {
     }
 
     fun detectGesture(bitmap: Bitmap) {
+        //main fuction for getting recognized gestures
         try {
             val mpImage = BitmapImageBuilder(bitmap).build()
             val frameTime = System.currentTimeMillis()

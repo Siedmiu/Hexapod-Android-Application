@@ -34,7 +34,6 @@ import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.rememberPermissionState
 
 
-
 @Composable
 fun CameraPreview(
     modifier: Modifier = Modifier,
@@ -68,12 +67,12 @@ fun CameraPreview(
                             it.setSurfaceProvider(previewView.surfaceProvider)
                         }
 
-                    // ImageAnalysis use case dla wykrywania gestów
+                    // ImageAnalysis use case
                     val imageAnalysis = ImageAnalysis.Builder()
                         .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                         .build()
 
-                    // Analizator obrazu
+                    // Image analyser
                     imageAnalysis.setAnalyzer(ContextCompat.getMainExecutor(context)) { imageProxy ->
                         gestureDetector?.let { detector ->
                             try {
@@ -104,7 +103,7 @@ fun CameraPreview(
         })
 }
 
-// Poprawiona funkcja konwersji ImageProxy na Bitmap z transformacją dla orientacji pionowej
+// ImageProxy to Bitmap conversion
 fun ImageProxy.convertToBitmap(): Bitmap {
     return when (format) {
         ImageFormat.YUV_420_888 -> {
@@ -126,49 +125,50 @@ fun ImageProxy.convertToBitmap(): Bitmap {
             val outputStream = java.io.ByteArrayOutputStream()
             yuvImage.compressToJpeg(Rect(0, 0, width, height), 100, outputStream)
             val imageBytes = outputStream.toByteArray()
-            
-            val originalBitmap = android.graphics.BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-            
-            // Transformacja dla telefonu pionowego:
-            // 1. Obrót o 270 stopni (90° + 180°) aby prawidłowo zorientować gesty
-            // 2. Odbicie lustrzane dla kamery przedniej
+
+            val originalBitmap =
+                android.graphics.BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+
+            // tranformation for vertical phone orientation
             val matrix = android.graphics.Matrix().apply {
-                postRotate(270f) // Obrót o 270 stopni
-                postScale(-1f, 1f) // Odbicie lustrzane dla kamery przedniej
+                postRotate(270f)
+                postScale(-1f, 1f) //mirror view for front camera
             }
-            
+
             android.graphics.Bitmap.createBitmap(
-                originalBitmap, 
-                0, 
-                0, 
-                originalBitmap.width, 
-                originalBitmap.height, 
-                matrix, 
+                originalBitmap,
+                0,
+                0,
+                originalBitmap.width,
+                originalBitmap.height,
+                matrix,
                 true
             ).also {
-                originalBitmap.recycle() // Zwolnienie pamięci
+                originalBitmap.recycle()
             }
         }
+
         else -> {
-            // Fallback dla innych formatów
+            // Fallback for other data formats
             val buffer = planes[0].buffer
             val bytes = ByteArray(buffer.remaining())
             buffer.get(bytes)
-            val originalBitmap = android.graphics.BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-            
-            // Ta sama transformacja dla fallback
+            val originalBitmap =
+                android.graphics.BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+
+            // rotation for fallbacks
             val matrix = android.graphics.Matrix().apply {
-                postRotate(270f) // Obrót o 270 stopni
-                postScale(-1f, 1f) // Odbicie lustrzane dla kamery przedniej
+                postRotate(270f)
+                postScale(-1f, 1f)
             }
-            
+
             android.graphics.Bitmap.createBitmap(
-                originalBitmap, 
-                0, 
-                0, 
-                originalBitmap.width, 
-                originalBitmap.height, 
-                matrix, 
+                originalBitmap,
+                0,
+                0,
+                originalBitmap.width,
+                originalBitmap.height,
+                matrix,
                 true
             ).also {
                 originalBitmap.recycle()
@@ -193,6 +193,7 @@ fun CameraPermissionScreen(
         is PermissionStatus.Granted -> {
             onPermissionGranted()
         }
+
         is PermissionStatus.Denied -> {
             Column(
                 modifier = Modifier

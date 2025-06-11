@@ -2,6 +2,7 @@ package com.example.hexapod.ui
 
 import GestureListener
 import HandGestureDetector
+import android.annotation.SuppressLint
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -11,8 +12,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.absoluteOffset
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -21,7 +20,6 @@ import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
@@ -55,6 +53,7 @@ import com.google.accompanist.permissions.rememberPermissionState
 import java.util.Timer
 import java.util.TimerTask
 
+@SuppressLint("DefaultLocale")
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun MainScreen() {
@@ -85,7 +84,7 @@ fun MainScreen() {
     var gestureConfidence by remember { mutableStateOf(0f) }
     var handPosition by remember { mutableStateOf(Pair(0f, 0f)) }
 
-    LaunchedEffect(context){
+    LaunchedEffect(context) {
         try {
             gestureDetector = HandGestureDetector(context)
             Log.d("MainScreen", "GestureDetector initialized successfully")
@@ -104,14 +103,18 @@ fun MainScreen() {
 
     LaunchedEffect(gestureDetector) {
         gestureDetector?.setGestureListener(object : GestureListener {
-            override fun onGestureDetected(gesture: String, position: Pair<Float, Float>, confidence: Float) {
+            override fun onGestureDetected(
+                gesture: String,
+                position: Pair<Float, Float>,
+                confidence: Float
+            ) {
                 currentGesture = gesture
                 gestureConfidence = confidence
                 handPosition = position
 
-                // --- tutaj wysyłamy websocket po wykryciu konkretnego gestu ---
+                // sending the websocket after gesture is detected
                 when (gesture) {
-                    "Open_Palm"   -> WebSocketHandler.sendMessage("hi")
+                    "Open_Palm" -> WebSocketHandler.sendMessage("hi")
                     "Closed_Fist" -> WebSocketHandler.sendMessage("stop")
                     // ...
                 }
@@ -152,7 +155,7 @@ fun MainScreen() {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(400.dp) // stała przestrzeń: 200dp na obraz + 200dp na ewentualny tekst
+                        .height(400.dp) // space for info about detected gesture
                 ) {
                     CameraPreview(
                         gestureDetector = gestureDetector,
@@ -163,16 +166,18 @@ fun MainScreen() {
                     )
                     currentGesture?.let { gesture ->
                         Text(
-                            text = "Gesture: ${when (gesture) {
-                                "Closed_Fist" -> "Closed Fist"
-                                "Open_Palm"   -> "Open Palm"
-                                "Pointing_Up" -> "Pointing Up"
-                                "Thumb_Down"  -> "Thumb Down"
-                                "Thumb_Up"    -> "Thumb Up"
-                                "Victory"     -> "Victory"
-                                "ILoveYou"    -> "I Love You"
-                                else          -> gesture
-                            }}, Confidence: ${String.format("%.2f", gestureConfidence)}",
+                            text = "Gesture: ${
+                                when (gesture) {
+                                    "Closed_Fist" -> "Closed Fist"
+                                    "Open_Palm" -> "Open Palm"
+                                    "Pointing_Up" -> "Pointing Up"
+                                    "Thumb_Down" -> "Thumb Down"
+                                    "Thumb_Up" -> "Thumb Up"
+                                    "Victory" -> "Victory"
+                                    "ILoveYou" -> "I Love You"
+                                    else -> gesture
+                                }
+                            }, Confidence: ${String.format("%.2f", gestureConfidence)}",
                             modifier = Modifier.align(Alignment.BottomCenter)
                         )
                     }
@@ -207,7 +212,7 @@ fun MainScreen() {
         item {
             Row {
                 Button(
-                    onClick = { WebSocketHandler.sendMessage("hi")},
+                    onClick = { WebSocketHandler.sendMessage("hi") },
                     modifier = Modifier
                         .padding(12.dp)
                         .weight(1f)
@@ -224,7 +229,8 @@ fun MainScreen() {
                             WebSocketHandler.sendMessage("trigateForw")
                         } else if (selectedOption == "Wavegate") {
                             WebSocketHandler.sendMessage("wavegateForw")
-                        } },
+                        }
+                    },
                     modifier = Modifier
                         .padding(12.dp)
                         .weight(1f)
@@ -234,11 +240,10 @@ fun MainScreen() {
                 Button(
                     onClick = {
                         WebSocketHandler.sendMessage(" ")
-                        if (cameraPermissionState.status.isGranted)
-                        {
+                        if (cameraPermissionState.status.isGranted) {
                             cameraOn = !cameraOn
                         }
-                              },
+                    },
                     modifier = Modifier
                         .padding(12.dp)
                         .weight(1f)
@@ -250,7 +255,7 @@ fun MainScreen() {
         item {
             Row {
                 Button(
-                    onClick = { WebSocketHandler.sendMessage("left",angle.toString())},
+                    onClick = { WebSocketHandler.sendMessage("left", angle.toString()) },
                     modifier = Modifier
                         .padding(12.dp)
                         .weight(1f)
@@ -266,7 +271,7 @@ fun MainScreen() {
                     Text(text = stringResource(R.string.button22), fontSize = 12.sp)
                 }
                 Button(
-                    onClick = { WebSocketHandler.sendMessage("right",angle.toString()) },
+                    onClick = { WebSocketHandler.sendMessage("right", angle.toString()) },
                     modifier = Modifier
                         .padding(12.dp)
                         .weight(1f)
@@ -278,7 +283,7 @@ fun MainScreen() {
         item {
             Row {
                 Button(
-                    onClick = { WebSocketHandler.sendMessage("point add",posX1,posY1) },
+                    onClick = { WebSocketHandler.sendMessage("point add", posX1, posY1) },
                     modifier = Modifier
                         .padding(12.dp)
                         .weight(1f)
@@ -295,7 +300,8 @@ fun MainScreen() {
                             WebSocketHandler.sendMessage("trigateBack")
                         } else if (selectedOption == "Wavegate") {
                             WebSocketHandler.sendMessage("wavegateBack")
-                        } },
+                        }
+                    },
                     modifier = Modifier
                         .padding(12.dp)
                         .weight(1f)

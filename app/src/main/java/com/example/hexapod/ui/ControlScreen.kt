@@ -15,32 +15,37 @@ import com.example.hexapod.data.GlobalData
 import com.example.hexapod.ui.theme.FirstTheme
 
 
-@Composable fun ControlScreen(){
-    val sliderPosition = remember { mutableStateListOf<Float>().apply { repeat(18) { add(GlobalData.sliderPosition[it])} } }
+@Composable
+fun ControlScreen() {
+    val sliderPosition =
+        remember { mutableStateListOf<Float>().apply { repeat(18) { add(GlobalData.sliderPosition[it]) } } }
 
-   LazyColumn(Modifier.padding(start = 30.dp, end = 30.dp)) {
+    LazyColumn(Modifier.padding(start = 30.dp, end = 30.dp)) {
 
-       for (i in 0 until sliderPosition.size){
-           item {
+        for (i in 0 until sliderPosition.size) {
+            item {
 
-               if (i % 3 == 0){
-                   Text(text = "Leg " + (i/3+1).toString(), Modifier.padding(top = 10.dp, bottom = 10.dp))
-               }
+                if (i % 3 == 0) {
+                    Text(
+                        text = "Leg " + (i / 3 + 1).toString(),
+                        Modifier.padding(top = 10.dp, bottom = 10.dp)
+                    )
+                }
 
-               Slider(
-                   value = sliderPosition[i],
-                   onValueChange = { 
+                Slider(
+                    value = sliderPosition[i],
+                    onValueChange = {
                         sliderPosition[i] = it
                         GlobalData.sliderPosition[i] = it
-                        WebSocketHandler.sendServo(i,sliderPosition[i].toInt())
-                        },
-                   valueRange = 0f..180f
-               )
+                        WebSocketHandler.sendServo(i, sliderPosition[i].toInt())
+                    },
+                    valueRange = 0f..180f
+                )
 
-               Text(text = sliderPosition[i].toInt().toString())
-           }
-       }
-   }
+                Text(text = sliderPosition[i].toInt().toString())
+            }
+        }
+    }
 
 }
 

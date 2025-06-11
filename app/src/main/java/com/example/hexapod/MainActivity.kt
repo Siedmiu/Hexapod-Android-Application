@@ -34,14 +34,14 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-    
+
     override fun onDestroy() {
         super.onDestroy()
         WebSocketHandler.disconnect()
     }
 }
 
-enum class HexScreen(@StringRes val title: Int){
+enum class HexScreen(@StringRes val title: Int) {
     Main(title = R.string.main),
     Info(title = R.string.info),
     Control(title = R.string.control)
@@ -51,7 +51,7 @@ enum class HexScreen(@StringRes val title: Int){
 fun MMenu1(navController: NavHostController = rememberNavController()) {
 
     Scaffold(
-        bottomBar = { MyNavBar(navController) } // Użycie NavBar jako dolnego paska
+        bottomBar = { MyNavBar(navController) } // Navigation bar at the bottom
     ) {
         NavHostContainer(navController, Modifier.padding(it))
     }
@@ -69,7 +69,7 @@ fun MMenu1Preview() {
 
 @Preview
 @Composable
-fun NavBarPreview(){
+fun NavBarPreview() {
     FirstTheme { MyNavBar(navController = rememberNavController()) }
 }
 
