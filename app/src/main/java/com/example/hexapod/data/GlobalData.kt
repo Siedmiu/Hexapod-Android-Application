@@ -8,4 +8,6 @@ object GlobalData {
     var positionY = 0f
 
     var angle1 = 0
+
+    var cameraOn = false
 }

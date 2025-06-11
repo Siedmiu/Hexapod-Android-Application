@@ -1,5 +1,7 @@
 package com.example.hexapod.ui
 
+import GestureListener
+import HandGestureDetector
 import android.os.Handler
 import android.os.Looper
 import androidx.compose.foundation.Image
@@ -7,6 +9,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -14,11 +18,13 @@ import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,6 +32,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -33,14 +40,19 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.hexapod.CameraPreview
 import com.example.hexapod.R
 import com.example.hexapod.WebSocketHandler
 import com.example.hexapod.data.GlobalData
 import com.example.hexapod.ui.theme.FirstTheme
 import com.github.Mindinventory.circularslider.CircularProgressBar
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
 import java.util.Timer
 import java.util.TimerTask
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun MainScreen() {
     var isConnected by remember { mutableStateOf(WebSocketHandler.isConnected()) }
@@ -56,6 +68,44 @@ fun MainScreen() {
     var angle by rememberSaveable { mutableStateOf(GlobalData.angle1) }
 
     val maxAngle = 180
+
+    val cameraPermissionState = rememberPermissionState(
+        android.Manifest.permission.CAMERA
+    )
+
+    var cameraOn by remember { mutableStateOf(GlobalData.cameraOn) }
+
+//    val context = LocalContext.current
+//    val gestureDetector = remember { HandGestureDetector(context) }
+//
+//    var currentGesture by remember { mutableStateOf<String?>(null) }
+//    var gestureConfidence by remember { mutableStateOf(0f) }
+//    var handPosition by remember { mutableStateOf(Pair(0f, 0f)) }
+
+    LaunchedEffect(Unit) {
+        if (!cameraPermissionState.status.isGranted) {
+            cameraPermissionState.launchPermissionRequest()
+        }
+    }
+        //TODO gesture recognition
+//    LaunchedEffect(gestureDetector) {
+//        gestureDetector.setGestureListener(object : GestureListener {
+//            override fun onGestureDetected(gesture: String, position: Pair<Float, Float>, confidence: Float) {
+//                currentGesture = gesture
+//                gestureConfidence = confidence
+//                handPosition = position
+//            }
+//
+//            override fun onGestureLost() {
+//                currentGesture = null
+//                gestureConfidence = 0f
+//            }
+//
+//            override fun onHandPositionChanged(position: Pair<Float, Float>) {
+//                handPosition = position
+//            }
+//        })
+//    }
 
     DisposableEffect(Unit) {
         timer.schedule(object : TimerTask() {
@@ -76,30 +126,40 @@ fun MainScreen() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        item {
-            Text(
-                text = "Status: \n",
-                fontSize = 40.sp,
-                lineHeight = 60.sp,
-                textAlign = TextAlign.Center,
-            )
+        if (cameraOn)
+        {
+            item {
+                CameraPreview(
+                                modifier = Modifier.fillMaxWidth()
+                                    .height(200.dp)
+                            )
+                Spacer(modifier = Modifier.height(200.dp))
+            }
         }
+        else {
+            item {
+                Text(
+                    text = "Status: \n",
+                    fontSize = 40.sp,
+                    lineHeight = 60.sp,
+                    textAlign = TextAlign.Center,
+                )
+                val textCon = if (isConnected) "Connected" else "Disconnected"
 
-        val textCon = if (isConnected) "Connected" else "Disconnected"
-        item {
-            Text(
-                text = textCon,
-                fontSize = 60.sp,
-                lineHeight = 60.sp,
-                textAlign = TextAlign.Center,
-                color = if (isConnected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error
-            )
+                Text(
+                    text = textCon,
+                    fontSize = 60.sp,
+                    lineHeight = 60.sp,
+                    textAlign = TextAlign.Center,
+                    color = if (isConnected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error
+                )
 
-            Image(
-                painter = painterResource(R.drawable.hexapod),
-                contentDescription = "Icon"
-            )
-            Spacer(modifier = Modifier.height(32.dp))
+                Image(
+                    painter = painterResource(R.drawable.hexapod),
+                    contentDescription = "Icon"
+                )
+                Spacer(modifier = Modifier.height(32.dp))
+            }
         }
 
         item {
@@ -130,7 +190,14 @@ fun MainScreen() {
                     Text(text = stringResource(R.string.button12), fontSize = 12.sp)
                 }
                 Button(
-                    onClick = { WebSocketHandler.sendMessage(" ") },
+                    onClick = {
+                        WebSocketHandler.sendMessage(" ")
+                        if (cameraPermissionState.status.isGranted)
+                        {
+                            cameraOn = !cameraOn
+
+                        }
+                              },
                     modifier = Modifier
                         .padding(12.dp)
                         .weight(1f)
