@@ -1,8 +1,14 @@
 package com.example.hexapod
 
+import HandGestureDetector
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.util.Log
+import android.util.Size
 import android.view.ViewGroup
 import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageAnalysis
+import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
@@ -26,11 +32,14 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.rememberPermissionState
 
+
+
 @Composable
 fun CameraPreview(
     modifier: Modifier = Modifier,
-    cameraSelector: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA,
+    cameraSelector: CameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA, // Zmienione na przednią kamerę
     scaleType: PreviewView.ScaleType = PreviewView.ScaleType.FILL_CENTER,
+    gestureDetector: HandGestureDetector? = null // Dodany parametr
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     AndroidView(
@@ -49,16 +58,40 @@ fun CameraPreview(
 
             cameraProviderFuture.addListener({
                 val cameraProvider = cameraProviderFuture.get()
+
                 val preview = Preview.Builder()
                     .build()
                     .also {
                         it.setSurfaceProvider(previewView.surfaceProvider)
                     }
 
+                // DODANE: ImageAnalysis use case dla wykrywania gestów
+                val imageAnalysis = ImageAnalysis.Builder()
+                    .setTargetResolution(Size(640, 480))
+                    .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                    .build()
+
+                // Analizator obrazu
+                imageAnalysis.setAnalyzer(ContextCompat.getMainExecutor(context)) { imageProxy ->
+                    gestureDetector?.let { detector ->
+                        try {
+                            val bitmap = imageProxy.toBitmap()
+                            detector.detectGesture(bitmap)
+                        } catch (e: Exception) {
+                            Log.e("CameraPreview", "Gesture detection failed: ${e.message}")
+                        }
+                    }
+                    imageProxy.close()
+                }
+
                 try {
                     cameraProvider.unbindAll()
+                    // ZMIENIONE: Dodany imageAnalysis do bindToLifecycle
                     cameraProvider.bindToLifecycle(
-                        lifecycleOwner, cameraSelector, preview
+                        lifecycleOwner,
+                        cameraSelector,
+                        preview,
+                        imageAnalysis // Dodany ImageAnalysis
                     )
                 } catch (exc: Exception) {
                     Log.e("Camera", "Use case binding failed", exc)
@@ -68,6 +101,15 @@ fun CameraPreview(
             previewView
         })
 }
+
+// DODANA: Funkcja pomocnicza do konwersji ImageProxy na Bitmap
+fun ImageProxy.toBitmap(): Bitmap {
+    val buffer = planes[0].buffer
+    val bytes = ByteArray(buffer.remaining())
+    buffer.get(bytes)
+    return BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+}
+
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable

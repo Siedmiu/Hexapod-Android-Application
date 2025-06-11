@@ -4,6 +4,7 @@ import GestureListener
 import HandGestureDetector
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -75,37 +76,48 @@ fun MainScreen() {
 
     var cameraOn by remember { mutableStateOf(GlobalData.cameraOn) }
 
-//    val context = LocalContext.current
-//    val gestureDetector = remember { HandGestureDetector(context) }
-//
-//    var currentGesture by remember { mutableStateOf<String?>(null) }
-//    var gestureConfidence by remember { mutableStateOf(0f) }
-//    var handPosition by remember { mutableStateOf(Pair(0f, 0f)) }
+    val context = LocalContext.current
+    var gestureDetector by remember { mutableStateOf<HandGestureDetector?>(null) }
+
+    var currentGesture by remember { mutableStateOf<String?>(null) }
+    var gestureConfidence by remember { mutableStateOf(0f) }
+    var handPosition by remember { mutableStateOf(Pair(0f, 0f)) }
+
+    LaunchedEffect(context){
+        try {
+            gestureDetector = HandGestureDetector(context)
+            Log.d("MainScreen", "GestureDetector initialized successfully")
+        } catch (e: Exception) {
+            Log.e("MainScreen", "Failed to initialize gesture detector: ${e.message}")
+        }
+    }
 
     LaunchedEffect(Unit) {
         if (!cameraPermissionState.status.isGranted) {
             cameraPermissionState.launchPermissionRequest()
+
         }
+
     }
-        //TODO gesture recognition
-//    LaunchedEffect(gestureDetector) {
-//        gestureDetector.setGestureListener(object : GestureListener {
-//            override fun onGestureDetected(gesture: String, position: Pair<Float, Float>, confidence: Float) {
-//                currentGesture = gesture
-//                gestureConfidence = confidence
-//                handPosition = position
-//            }
-//
-//            override fun onGestureLost() {
-//                currentGesture = null
-//                gestureConfidence = 0f
-//            }
-//
-//            override fun onHandPositionChanged(position: Pair<Float, Float>) {
-//                handPosition = position
-//            }
-//        })
-//    }
+
+    LaunchedEffect(gestureDetector) {
+        gestureDetector?.setGestureListener(object : GestureListener {
+            override fun onGestureDetected(gesture: String, position: Pair<Float, Float>, confidence: Float) {
+                currentGesture = gesture
+                gestureConfidence = confidence
+                handPosition = position
+            }
+
+            override fun onGestureLost() {
+                currentGesture = null
+                gestureConfidence = 0f
+            }
+
+            override fun onHandPositionChanged(position: Pair<Float, Float>) {
+                handPosition = position
+            }
+        })
+    }
 
     DisposableEffect(Unit) {
         timer.schedule(object : TimerTask() {
@@ -130,10 +142,22 @@ fun MainScreen() {
         {
             item {
                 CameraPreview(
+                                gestureDetector = gestureDetector,
                                 modifier = Modifier.fillMaxWidth()
                                     .height(200.dp)
                             )
                 Spacer(modifier = Modifier.height(200.dp))
+                if (currentGesture != null)
+                {
+                    Text(text = when(currentGesture) {
+                        "thumb up" -> "Thumbs up"
+                        "index up" -> "Index up"
+                        "okay" -> "Okay"
+                        "peace" -> "Peace"
+                        "rock" -> "Rock"
+                            else -> "Another gesture"
+                    })
+                }
             }
         }
         else {
@@ -195,7 +219,6 @@ fun MainScreen() {
                         if (cameraPermissionState.status.isGranted)
                         {
                             cameraOn = !cameraOn
-
                         }
                               },
                     modifier = Modifier

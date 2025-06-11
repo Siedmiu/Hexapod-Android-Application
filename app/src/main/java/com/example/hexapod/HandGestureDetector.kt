@@ -14,13 +14,12 @@ class HandGestureDetector(private val context: Context) {
     private var lastPosition: Pair<Float, Float> = Pair(0f, 0f)
     private var gestureListener: GestureListener? = null
     private var gestureStartTime: Long = 0
-    private val gestureConfirmationThreshold = 500L // 500ms dla potwierdzenia gestu
+    private val gestureConfirmationThreshold = 500L
 
     init {
         setupGestureRecognizer()
     }
 
-    // Ustawienie listenera dla komunikatów o gestach
     fun setGestureListener(listener: GestureListener?) {
         gestureListener = listener
     }
@@ -68,7 +67,6 @@ class HandGestureDetector(private val context: Context) {
                         val y = wrist.y()
                         currentPosition = Pair(x, y)
 
-                        // Powiadomienie o zmianie pozycji dłoni
                         if (currentPosition != lastPosition) {
                             gestureListener?.onHandPositionChanged(currentPosition)
                         }
@@ -77,7 +75,6 @@ class HandGestureDetector(private val context: Context) {
             }
         }
 
-        // Obsługa komunikatów o gestach
         handleGestureChange(detectedGesture, currentPosition, confidence)
 
         lastPosition = currentPosition
