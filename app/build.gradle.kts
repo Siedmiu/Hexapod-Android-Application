@@ -58,16 +58,16 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    implementation("androidx.navigation:navigation-compose:2.8.9")
+    implementation(libs.androidx.navigation.compose)
 
-    implementation("com.github.Mindinventory:AndroidCircularSlider:0.0.2")
+    implementation(libs.mindinventory.circularslider)
 
-    implementation ("com.google.mediapipe:tasks-vision:0.10.21")
-    implementation ("androidx.camera:camera-core:1.3.0")
-    implementation ("androidx.camera:camera-camera2:1.3.0")
-    implementation ("androidx.camera:camera-lifecycle:1.3.0")
-    implementation ("androidx.camera:camera-view:1.3.0")
-    implementation ("com.google.accompanist:accompanist-permissions:0.32.0")
+    implementation(libs.mediapipe.tasks.vision)
+    implementation(libs.androidx.camera.core)
+    implementation(libs.androidx.camera.camera2)
+    implementation(libs.androidx.camera.lifecycle)
+    implementation(libs.androidx.camera.view)
+    implementation(libs.accompanist.permissions)
 
 
 }

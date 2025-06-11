@@ -7,9 +7,11 @@ import android.os.Looper
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.absoluteOffset
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -106,6 +108,13 @@ fun MainScreen() {
                 currentGesture = gesture
                 gestureConfidence = confidence
                 handPosition = position
+
+                // --- tutaj wysyłamy websocket po wykryciu konkretnego gestu ---
+                when (gesture) {
+                    "Open_Palm"   -> WebSocketHandler.sendMessage("hi")
+                    "Closed_Fist" -> WebSocketHandler.sendMessage("stop")
+                    // ...
+                }
             }
 
             override fun onGestureLost() {
@@ -138,29 +147,38 @@ fun MainScreen() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        if (cameraOn)
-        {
+        if (cameraOn) {
             item {
-                CameraPreview(
-                                gestureDetector = gestureDetector,
-                                modifier = Modifier.fillMaxWidth()
-                                    .height(200.dp)
-                            )
-                Spacer(modifier = Modifier.height(200.dp))
-                if (currentGesture != null)
-                {
-                    Text(text = when(currentGesture) {
-                        "thumb up" -> "Thumbs up"
-                        "index up" -> "Index up"
-                        "okay" -> "Okay"
-                        "peace" -> "Peace"
-                        "rock" -> "Rock"
-                            else -> "Another gesture"
-                    })
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(400.dp) // stała przestrzeń: 200dp na obraz + 200dp na ewentualny tekst
+                ) {
+                    CameraPreview(
+                        gestureDetector = gestureDetector,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(200.dp)
+                            .align(Alignment.TopCenter)
+                    )
+                    currentGesture?.let { gesture ->
+                        Text(
+                            text = "Gesture: ${when (gesture) {
+                                "Closed_Fist" -> "Closed Fist"
+                                "Open_Palm"   -> "Open Palm"
+                                "Pointing_Up" -> "Pointing Up"
+                                "Thumb_Down"  -> "Thumb Down"
+                                "Thumb_Up"    -> "Thumb Up"
+                                "Victory"     -> "Victory"
+                                "ILoveYou"    -> "I Love You"
+                                else          -> gesture
+                            }}, Confidence: ${String.format("%.2f", gestureConfidence)}",
+                            modifier = Modifier.align(Alignment.BottomCenter)
+                        )
+                    }
                 }
             }
-        }
-        else {
+        } else {
             item {
                 Text(
                     text = "Status: \n",
